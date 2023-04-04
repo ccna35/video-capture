@@ -1,12 +1,35 @@
 const localVideo = document.querySelector("#local");
 const remoteVideo = document.querySelector("#remote");
 const idInput = document.querySelector("input");
-const idField = document.querySelector("#uuid");
+const peerOneId = document.querySelector("#peerOne");
+const peerTwoId = document.querySelector("#peerTwo");
 const callBtn = document.querySelector("button");
+
+const socket = io("http://localhost:8000", {});
+
+socket.on("connected", (message) => {
+  console.log(message);
+});
+
+let userId;
+
+const peersList = [];
 
 const peer = new Peer();
 peer.on("open", (id) => {
-  idField.textContent = id;
+  peerOneId.textContent = id;
+
+  if (!peersList.find((peer) => peer === id)) {
+    peersList.push(id);
+  }
+
+  console.log(peersList);
+
+  socket.emit("userId", id);
+  socket.on("userConnected", (data) => {
+    console.log("Coming from server: ", data);
+    if (data !== id) peerTwoId.textContent = data;
+  });
 });
 
 async function callUser() {
@@ -26,14 +49,12 @@ async function callUser() {
     remoteVideo.srcObject = stream;
     remoteVideo.play();
   });
-  call.on("data", (stream) => {
-    remoteVideo.srcObject = stream;
-  });
+  //   call.on("data", (stream) => {
+  //     console.log("data: ", stream);
+  //     remoteVideo.srcObject = stream;
+  //   });
   call.on("error", (err) => {
     console.log(err);
-  });
-  call.on("close", () => {
-    endCall();
   });
 }
 
