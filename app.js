@@ -7,34 +7,22 @@ const callBtn = document.querySelector("button");
 
 const socket = io("http://localhost:8000", {});
 
-const peersList = [];
-
 socket.on("connected", (message) => {
   console.log(message);
-  console.log(peersList);
 });
 
-let peerId;
+let peersList = [];
 
 const peer = new Peer();
 peer.on("open", (id) => {
-  peerOneId.textContent = id;
-
-  // if (!peersList.find((peer) => peer === id)) {
-  //   peersList.push(id);
-  // }
-
-  peersList.push(id);
-
-  // console.log(peersList);
-
   socket.emit("userId", id);
   socket.on("userConnected", (data) => {
-    console.log(peersList);
+    peersList = data;
     console.log("Coming from server: ", data);
-    console.log(peersList);
-    peerId = data;
+    if (peersList.length === 1) peerOneId.textContent = peersList[0];
+    if (peersList.length === 2) peerTwoId.textContent = peersList.at(-1);
   });
+  // peerOneId.textContent = typeof peersList[0];
 });
 
 // Calling another peer
@@ -52,7 +40,7 @@ async function callUser() {
   localVideo.srcObject = stream;
   localVideo.play();
   // make the call
-  const call = peer.call(peerId, stream);
+  const call = peer.call(peersList.at(-1), stream);
   call.on("stream", (stream) => {
     remoteVideo.srcObject = stream;
     remoteVideo.play();
