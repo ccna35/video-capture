@@ -7,52 +7,59 @@ const callBtn = document.querySelector("button");
 
 const socket = io("http://localhost:8000", {});
 
+const peersList = [];
+
 socket.on("connected", (message) => {
   console.log(message);
+  console.log(peersList);
 });
 
-let userId;
-
-const peersList = [];
+let peerId;
 
 const peer = new Peer();
 peer.on("open", (id) => {
   peerOneId.textContent = id;
 
-  if (!peersList.find((peer) => peer === id)) {
-    peersList.push(id);
-  }
+  // if (!peersList.find((peer) => peer === id)) {
+  //   peersList.push(id);
+  // }
 
-  console.log(peersList);
+  peersList.push(id);
+
+  // console.log(peersList);
 
   socket.emit("userId", id);
   socket.on("userConnected", (data) => {
+    console.log(peersList);
     console.log("Coming from server: ", data);
-    if (data !== id) peerTwoId.textContent = data;
+    console.log(peersList);
+    peerId = data;
   });
 });
 
+// Calling another peer
+
+// get the id entered by the user
+// const peerId = idInput.value;
+
 async function callUser() {
-  // get the id entered by the user
-  const peerId = idInput.value;
   // grab the camera and mic
   const stream = await navigator.mediaDevices.getUserMedia({
     video: true,
+    audio: false,
   });
   // switch to the video call and play the camera preview
   localVideo.srcObject = stream;
   localVideo.play();
-
   // make the call
   const call = peer.call(peerId, stream);
   call.on("stream", (stream) => {
     remoteVideo.srcObject = stream;
     remoteVideo.play();
   });
-  //   call.on("data", (stream) => {
-  //     console.log("data: ", stream);
-  //     remoteVideo.srcObject = stream;
-  //   });
+  // call.on("data", (stream) => {
+  //   document.querySelector("#remote-video").srcObject = stream;
+  // });
   call.on("error", (err) => {
     console.log(err);
   });
