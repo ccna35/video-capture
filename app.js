@@ -1,9 +1,10 @@
 const localVideo = document.querySelector("#local");
 const remoteVideo = document.querySelector("#remote");
-const idInput = document.querySelector("input");
 const peerOneId = document.querySelector("#peerOne");
 const peerTwoId = document.querySelector("#peerTwo");
 const callBtn = document.querySelector("button");
+const peerOneLabel = document.querySelector("[for=peerOne]");
+const peerTwoLabel = document.querySelector("[for=peerTwo]");
 
 const socket = io("https://video-call-server-i8op.onrender.com", {});
 
@@ -11,7 +12,7 @@ socket.on("connected", (message) => {
   console.log(message);
 });
 
-let peersList = [];
+let peersList = []; // contains a list of avaiable peers
 
 const peer = new Peer();
 peer.on("open", (id) => {
@@ -19,10 +20,28 @@ peer.on("open", (id) => {
   socket.on("userConnected", (data) => {
     peersList = data;
     console.log("Coming from server: ", data);
-    if (peersList.length === 1) peerOneId.textContent = peersList[0];
-    if (peersList.length === 2) peerTwoId.textContent = peersList.at(-1);
+    if (peersList.length === 0) {
+      callBtn.classList.add("d-none");
+    }
+    if (peersList.length === 1) {
+      callBtn.classList.add("d-none");
+      // const newPelement = createPeerElement("peerOne");
+      // newPelement.textContent = peersList[0];
+      // peerOneLabel.insertAdjacentElement("afterend", newPelement);
+      peerOneId.textContent = peersList[0];
+      peerTwoId.textContent = "";
+      // peerOneId.setAttribute("class", "alert alert-success");
+      // peerTwoId.removeAttribute("class", "alert alert-success");
+    }
+    if (peersList.length === 2) {
+      callBtn.classList.remove("d-none");
+      // const newPelement = createPeerElement("peerTwo");
+      // newPelement.textContent = peersList.at(-1);
+      // peerTwoLabel.insertAdjacentElement("afterend", newPelement);
+      peerTwoId.textContent = peersList.at(-1);
+      // peerTwoId.setAttribute("class", "alert alert-success");
+    }
   });
-  // peerOneId.textContent = typeof peersList[0];
 });
 
 // Calling another peer
@@ -79,3 +98,12 @@ peer.on("call", (call) => {
 });
 
 callBtn.addEventListener("click", callUser);
+
+// A function to create P element that contains the user ID
+
+function createPeerElement(peerNum) {
+  const pElement = document.createElement("p");
+  pElement.setAttribute("id", peerNum);
+  pElement.setAttribute("class", "alert alert-success");
+  return pElement;
+}
