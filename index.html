@@ -5,18 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
-    <script
-      src="https://unpkg.com/peerjs@1.3.2/dist/peerjs.min.js"
-      defer
-    ></script>
 
-    <script
-      src="https://cdn.socket.io/4.6.0/socket.io.min.js"
-      integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+"
-      crossorigin="anonymous"
-    ></script>
-
-    <script src="app.js" defer async></script>
     <title>Video Call App</title>
   </head>
   <body>
@@ -36,5 +25,15 @@
     <p id="peerOne"></p>
     <label for="peerTwo">Peer Two: </label>
     <p id="peerTwo"></p>
+
+    <script src="https://unpkg.com/peerjs@1.3.2/dist/peerjs.min.js"></script>
+
+    <script
+      src="https://cdn.socket.io/4.6.0/socket.io.min.js"
+      integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+"
+      crossorigin="anonymous"
+    ></script>
+
+    <script src="app.js"></script>
   </body>
 </html>
