@@ -5,7 +5,7 @@ const peerOneId = document.querySelector("#peerOne");
 const peerTwoId = document.querySelector("#peerTwo");
 const callBtn = document.querySelector("button");
 
-const socket = io("http://localhost:8000", {});
+const socket = io("https://video-call-server-i8op.onrender.com", {});
 
 socket.on("connected", (message) => {
   console.log(message);
