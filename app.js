@@ -34,7 +34,7 @@ async function callUser() {
   // grab the camera and mic
   const stream = await navigator.mediaDevices.getUserMedia({
     video: true,
-    audio: false,
+    audio: true,
   });
   // switch to the video call and play the camera preview
   localVideo.srcObject = stream;
