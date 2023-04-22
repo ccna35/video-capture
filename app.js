@@ -12,7 +12,7 @@ socket.on("connected", (message) => {
   console.log(message);
 });
 
-let peersList = []; // contains a list of avaiable peers
+let peersList = []; // contains a list of available peers
 
 const peer = new Peer();
 peer.on("open", (id) => {
@@ -25,21 +25,12 @@ peer.on("open", (id) => {
     }
     if (peersList.length === 1) {
       callBtn.classList.add("d-none");
-      // const newPelement = createPeerElement("peerOne");
-      // newPelement.textContent = peersList[0];
-      // peerOneLabel.insertAdjacentElement("afterend", newPelement);
       peerOneId.textContent = peersList[0];
       peerTwoId.textContent = "";
-      // peerOneId.setAttribute("class", "alert alert-success");
-      // peerTwoId.removeAttribute("class", "alert alert-success");
     }
     if (peersList.length === 2) {
       callBtn.classList.remove("d-none");
-      // const newPelement = createPeerElement("peerTwo");
-      // newPelement.textContent = peersList.at(-1);
-      // peerTwoLabel.insertAdjacentElement("afterend", newPelement);
       peerTwoId.textContent = peersList.at(-1);
-      // peerTwoId.setAttribute("class", "alert alert-success");
     }
   });
 });
